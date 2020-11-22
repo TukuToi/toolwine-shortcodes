@@ -164,6 +164,15 @@ class TWS_Shortcodes{
 		return $post;
 	}
 
+	function filter_external_shortcode_atts( $out, $pairs, $atts, $shortcode ) { 
+		/*var_dump($out);
+		var_dump($pairs);
+		var_dump($atts);
+		var_dump($shortcode);*/
+		$out = $this->tws_register_atts($out, $atts);
+	    return $out; 
+	}
+
 	function tws_register_atts($default, $atts){
 		$dbt 			= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
         $caller 		= isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
@@ -175,8 +184,18 @@ class TWS_Shortcodes{
 	
 	function tws_register_shortcodes($shortcodes){
 		foreach ($shortcodes as $shortcode => $callback) {
-			$callback = empty( method_exists ( $this , $callback) ) ? $callback : array( $this, $callback );
+			$external_callback = empty( method_exists ( $this , $callback) ) ? true : false;
+			if(!empty($external_callback)){
+				$callback = $callback;
+			}
+			else{
+				$callback = array( $this, $callback );
+			}
 			add_shortcode( $shortcode, $callback );
+
+				//$shortcode_filter = 'shortcode_atts_'.$shortcode;
+				add_filter( 'shortcode_atts_' . $shortcode, array($this, 'filter_external_shortcode_atts'), 10, 4 ); 
+			
 		}
 	}
 
