@@ -1,5 +1,7 @@
-# toolwine-shortcodes
-Additional ShortCodes for usage with Toolset and WordPress
+# ToolWine ShortCodes
+
+Additional ShortCodes for usage with Toolset, WPML and WordPress
+Install and activate like any other plugin, **requires** Toolset, WPML is optional.
 
 # Usage
 - [DEVELOPERS] discover **existing shortcodes** by calling `[tws_info]` shortcode anywhere. 
