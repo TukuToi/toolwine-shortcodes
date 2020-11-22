@@ -85,7 +85,7 @@ class TWS_Shortcodes{
 	 * @atts post_parent(int), post_type(string post name)
 	 * @return int
 	 */
-	function tws_has_wp_children(){
+	function tws_get_wp_children(){
 
 		$args = $this->tws_register_atts(
 			array(
