@@ -3,11 +3,13 @@ class TWS_Shortcodes{
 
 	public $shortcodes;
 	public $post;
+	public $out;
 	
 	function __construct($shortcodes) {
 		$this->shortcodes = $shortcodes;
 		$this->post 	  = $this->tws_current_post();
-		
+		$this->out 		  = '';
+
 		$this->tws_register_shortcodes($this->shortcodes);
 	}
 	
@@ -34,12 +36,12 @@ class TWS_Shortcodes{
 		   	case 'month':
 		    if ($$condition != $value) {
 		       	$$condition = $value;
-		       	return $this->tws_return_shortcode($content);
+		       	$this->out = $this->tws_return_shortcode($content);
 	    	}	      	
 	    	break;
 		}
 
-		return '';
+		return apply_filters(__FUNCTION__, $this->out);
 
 	}
 	
@@ -65,18 +67,17 @@ class TWS_Shortcodes{
 		if(is_object($term) && !empty($term)){
 			$prop = $atts['output'];
 			if( $atts['output'] == 'description' && $atts['filter'] == 'display' ){
-				return $this->tws_return_shortcode($term->$prop);
+				$this->out = $this->tws_return_shortcode($term->$prop);
 			}
 			elseif( $atts['output'] == 'archive-url' ){
 				$url = get_term_link( $term->$term_id , $term->taxonomy );
 				if(!is_wp_error( $url ))
-					return $url;
-				return '';
+					$this->out = $url;
 			}
-			return $term->$prop;
+			$this->out = $term->$prop;
 		}
 
-		return '';
+		return apply_filters(__FUNCTION__, $this->out);
 
 	}
 	
@@ -103,13 +104,13 @@ class TWS_Shortcodes{
 		$children = get_children( $args, OBJECT );
 
 		if( $atts['output'] == 'count' ){
-			return $atts['info'];
+			$this->out = count($children);
 		}
 		elseif( $atts['output'] == 'comma-list' ){
-			return $this->tws_comma_separate($children, $atts['prop']);
+			$this->out = $this->tws_comma_separate($children, $atts['prop']);
 		}
 
-		return '';
+		return apply_filters(__FUNCTION__, $this->out);
 
 	}
 	
@@ -128,10 +129,10 @@ class TWS_Shortcodes{
 
 		if(function_exists('wpml_get_language_information')){	
 			$language = wpml_get_language_information($atts['id']);
-			return $language[$atts['part']];
+			$this->out = $language[$atts['part']];
 		}
 	     
-	    return '';
+	    return apply_filters(__FUNCTION__, $this->out);
 
 	}
 
@@ -166,7 +167,8 @@ class TWS_Shortcodes{
 	function tws_register_atts($default, $atts){
 		$dbt 			= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
         $caller 		= isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
-        $default['info']= var_dump($default);
+        if( isset($atts['info']) )
+        	$atts['info'] = var_dump($default);
 		$atts 	= shortcode_atts( $default, $atts, array_search($caller, $this->shortcodes) );
 		return $atts;
 	}
