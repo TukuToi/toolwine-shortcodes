@@ -22,9 +22,15 @@ Install and activate like any other plugin, **requires** Toolset, WPML is option
   
 - [USER] call actual shortcodes like any other shortcode in WordPress!
 
-# Current list of ShortCodes:
+# Current list of ShortCodes (Production):
 - `tws_group_by`  Group entries in a Loop by dates
 - `tws_get_term`  Display all Term Object properties of a given term, can be set by all known get_term params
 - `tws_get_lang`  Display Current WPML language of set post, and set code 
 - `tws_children`  Display count or object data of children posts to set post (WP Native Relationship)
+
+# Current list of ShortCodes (Developers):
 - `tws_info`      ToolWine Internal ShortCode to output all available ShortCodes
+- each TWS ShortCode supports the attribute `info="1"` to dumpt ShortCode information
+
+# Current list of filters
+- You can apply a filter to each TWS ShortCode's output, as explained above in DEV section
