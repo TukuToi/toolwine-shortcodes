@@ -1,8 +1,4 @@
 <?php
-
-/**
- * 
- */
 class TWS_Shortcodes{
 
 	public $shortcodes;
@@ -12,10 +8,9 @@ class TWS_Shortcodes{
 
 		$this->tws_register_shortcodes($this->shortcodes);
 	}
-
- 	/**
-	 * ShortCode to group by same dates
-	 * Used on: Views 13518(CT 13513), 3095(CT 3107), 5841(CT 5842), 3078(CT 3080), 18323(CT 18316)
+	
+	/**
+	 * @atts	condition (year|month),value(DATE)
 	 */
 	function tws_group_by( $atts, $content = null ) {
 
