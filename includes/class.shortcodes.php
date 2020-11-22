@@ -12,6 +12,7 @@ class TWS_Shortcodes{
 	}
 	
 	/**
+	 * Group by date
 	 * @atts	condition (year|month),value(DATE)
 	 */
 	function tws_group_by( $atts, $content = null ) {
@@ -45,6 +46,7 @@ class TWS_Shortcodes{
 	/**
 	 * Get Term by
 	 * @return Term Object 
+	 * @atts field(term_id|slug), value, taxonomy(taxonomy name), output(description|all term object properties|archive-url), filter
 	 */
 	function tws_get_term_by( $atts ) {
 
@@ -78,12 +80,17 @@ class TWS_Shortcodes{
 
 	}
 	
+	/**
+	 * Count WP Native childred on post
+	 * @atts post_parent(int), post_type(string post name)
+	 * @return int
+	 */
 	function tws_has_wp_children(){
 
 		$args = $this->tws_register_atts(
 			array(
 		    	'post_parent' => $this->post->ID,
-				'post_type'      => 'page',
+			'post_type'      => 'page',
 			)
 		);
 		
@@ -97,6 +104,7 @@ class TWS_Shortcodes{
 	
 	/**
 	 * Get Current WPML Language code 
+	 * @atts id(int post id), part(string code part)
 	 */
 	function tws_current_wpml_language( $atts ) {
 		
