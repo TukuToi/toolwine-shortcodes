@@ -65,7 +65,8 @@ register_activation_hook( __FILE__, 'tws_activate' );
 if ( !is_admin() ) {
   require_once(TWS_MAIN_DIR.'includes/class.shortcodes.php');
   $shortcodes = array(
-    'tws_group_by' => 'tws_group_by',
+    'tws_group_by'    => 'tws_group_by',
+    'tws_get_term'    => 'tws_get_term_by',
   );
   new TWS_Shortcodes( $shortcodes );
 }
