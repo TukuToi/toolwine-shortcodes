@@ -37,9 +37,9 @@ Install and activate like any other plugin, **requires** Toolset, WPML is option
 
 # Extend ShortCodes list
 You can techincally extend the `TWS_Shortcodes` class with your own custom class. You will have available 3 public variables:
-`$shortcodes`	An array of existing registered shortcodes with their callback
-`$post;`	Global Post
-`$out;` 	The shortcode output.
+- `$shortcodes`	An array of existing registered shortcodes with their callback
+- `$post;`	Global Post
+- `$out;` 	The shortcode output.
 
 Also you will need to register your new shortcode with `add_filter('tws_shortcodes', 'your_custom_callback', 10, 1)`
 Example:
