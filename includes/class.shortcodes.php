@@ -46,7 +46,7 @@ class TWS_Shortcodes{
 	 * Get Term by
 	 * @return Term Object 
 	 */
-	function tws_get_term_by( $atts, $content = null ) {
+	function tws_get_term_by( $atts ) {
 
 		$atts = $this->tws_register_atts( 
 			array(
@@ -58,16 +58,40 @@ class TWS_Shortcodes{
 			)
 		);
 
-		$term 	= get_term_by($a['field'], $a['value'], $a['taxonomy'], OBJECT, $a['filter']);
+		$term 	= get_term_by($atts['field'], $atts['value'], $atts['taxonomy'], OBJECT, $atts['filter']);
 
 		if(is_object($term) && !empty($term)){
-			$prop = $a['output'];
-			if( $a['output'] == 'description' && $a['filter'] == 'display' ){
-				return tws_return_shortcode($term->$prop);
+			$prop = $atts['output'];
+			if( $atts['output'] == 'description' && $atts['filter'] == 'display' ){
+				return $this->tws_return_shortcode($term->$prop);
+			}
+			elseif( $atts['output'] == 'archive-url' ){
+				$url = get_term_link( $term->$term_id , $term->taxonomy );
+				if(!is_wp_error( $url ))
+					return $url;
+				return '';
 			}
 			return $term->$prop;
 		}
+
 		return '';
+
+	}
+	
+	function tws_has_wp_children(){
+
+		$args = $this->tws_register_atts(
+			array(
+		    	'post_parent' => $this->post->ID,
+				'post_type'      => 'page',
+			)
+		);
+		
+		$children = get_children( $args, OBJECT );
+		
+		$children = count($children);
+		
+		return $children;
 
 	}
 	
