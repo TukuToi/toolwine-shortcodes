@@ -36,16 +36,20 @@ Install and activate like any other plugin, **requires** Toolset, WPML is option
 - You can apply a filter to each TWS ShortCode's output, as explained above in DEV section
 
 # Extend ShortCodes list
-You can techincally extend the `TWS_Shortcodes` class with your own custom class. You will have available 3 public variables:
-- `$shortcodes`	An array of existing registered shortcodes with their callback
-- `$post;`	Global Post
-- `$out;` 	The shortcode output.
-
-Also you will need to register your new shortcode with `add_filter('tws_shortcodes', 'your_custom_callback', 10, 1)`
+You can techincally add your own shortcodes to the `TWS_Shortcodes` class with your the `tws_shortcodes` filter. 
 Example:
 ```
-function your_custom_callback(){
-	$shortcodes['your_shortcode'] =  'your_callback';
+//Add your ShortCodes to the TWS_Shortcodes Class 
+add_filter( 'tws_shortcodes', 'my_custom_shortcodes', 10, 1);
+
+//Declare your ShortCodes and callbacks
+function my_custom_shortcodes($shortcodes){
+	$shortcodes['my_shortcode'] = 'my_shortcode_function';	
+	return $shortcodes;
 }
-add_filter('tws_shortcodes', 'your_custom_callback', 10, 1)
+
+//Declare your ShortCode function
+function my_shortcode_function( $atts ){
+	return "foo and bar";
+}
 ```
