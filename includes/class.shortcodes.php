@@ -7,7 +7,7 @@ class TWS_Shortcodes{
 	function __construct($shortcodes) {
 		$this->shortcodes = $shortcodes;
 		$this->post 	  = $this->tws_current_post();
-
+		
 		$this->tws_register_shortcodes($this->shortcodes);
 	}
 	
@@ -21,7 +21,7 @@ class TWS_Shortcodes{
 			array(
 				'condition' => 'year',
 				'value' 	=> date('Y'),
-			)
+			), $atts
 		);
 
 		static $year 	= null;
@@ -57,7 +57,7 @@ class TWS_Shortcodes{
 				'taxonomy'	=> 'category', 
 				'output'	=> 'name', 
 				'filter'	=> 'raw'
-			)
+			), $atts
 		);
 
 		$term 	= get_term_by($atts['field'], $atts['value'], $atts['taxonomy'], OBJECT, $atts['filter']);
@@ -87,24 +87,28 @@ class TWS_Shortcodes{
 	 */
 	function tws_get_wp_children( $atts ){
 
-		$args = array(
-			'post_parent' 	=> $this->post->ID,
-			'post_type'     => 'page',
-		);
-		
+		$children_comma_list = '';
+
 		$atts = $this->tws_register_atts( 
 			array(
-				'output' => 'count',
-			)
+				'output' 		=> 'count',
+				'prop'			=> 'ID',
+				'post_parent'	=> $this->post->ID,
+				'post_type'		=> 'page',
+			),$atts
 		);
-		
+
+		$args = $this->tws_unset($atts, array('output', 'prop'));
+
 		$children = get_children( $args, OBJECT );
-		
+
 		if( $atts['output'] == 'count' ){
-			$children = count($children);
-			return $children;
+			return count($children);
 		}
-		
+		elseif( $atts['output'] == 'comma-list' ){
+			return $this->tws_comma_separate($children, $atts['prop']);
+		}
+
 		return '';
 
 	}
@@ -119,7 +123,7 @@ class TWS_Shortcodes{
 			array(
 				'id' 	=> $this->post,
 				'part' 	=> 'language_code',
-			)
+			), $atts
 		);
 
 		if(function_exists('wpml_get_language_information')){	
@@ -130,27 +134,44 @@ class TWS_Shortcodes{
 	    return '';
 
 	}
+
+	function tws_comma_separate($array, $prop){
+		$values_comma_list = '';
+		foreach ($array  as $key => $value) {
+			$values_comma_list .= $value->$prop . ',';
+		}
+		$values_comma_list = rtrim($values_comma_list, ',');
+		return $values_comma_list;
+	}
+
+	function tws_unset( $original, $remove ) {
+		foreach($remove as $key) {
+			unset($original[$key]);
+		}
+		return $original;
+	}
 	
 	function tws_current_post(){
 		global $post;
+
 		return $post;
 	}
 
-	function tws_register_atts($atts){
+	function tws_register_atts($default, $atts){
 		$dbt 	= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
-        	$caller = isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
-		$atts 	= shortcode_atts( $atts, $atts, array_search($caller, $this->shortcodes) );
+        $caller = isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
+		$atts 	= shortcode_atts( $default, $atts, array_search($caller, $this->shortcodes) );
 		return $atts;
 	}
 	
-	function tws_return_shortcode($content){
-		return wpv_do_shortcode($content);
-	}
-
 	function tws_register_shortcodes($shortcodes){
 		foreach ($shortcodes as $shortcode => $callback) {
 			add_shortcode( $shortcode, array( $this, $callback ) );
 		}
+	}
+
+	function tws_return_shortcode($content){
+		return wpv_do_shortcode($content);
 	}
 
 }
