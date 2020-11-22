@@ -68,6 +68,7 @@ if ( !is_admin() ) {
     'tws_group_by'    => 'tws_group_by',
     'tws_get_term'    => 'tws_get_term_by',
     'tws_get_lang'    => 'tws_current_wpml_language',
+    'tws_children'    => 'tws_has_wp_children',
   );
   new TWS_Shortcodes( $shortcodes );
 }
