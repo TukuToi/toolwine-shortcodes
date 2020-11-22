@@ -36,7 +36,8 @@ Install and activate like any other plugin, **requires** Toolset, WPML is option
 - You can apply a filter to each TWS ShortCode's output, as explained above in DEV section
 
 # Extend ShortCodes list
-You can techincally add your own shortcodes to the `TWS_Shortcodes` class with your the `tws_shortcodes` filter. 
+You can techincally add your own shortcodes to the `TWS_Shortcodes` class with the `tws_shortcodes` filter. 
+It allows you to run your shortcodes with TWS ShortCode attributes - even if you do not declare them in your code.
 
 Example:
 ```
