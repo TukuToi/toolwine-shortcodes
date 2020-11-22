@@ -2,9 +2,23 @@
 Additional ShortCodes for usage with Toolset and WordPress
 
 # Usage
-- [DEVELOPERS] discover existing plugins by calling `[tws_info]` shortcode anywhere. It will produce a simple var_dump with all ShortCode tags available and their callabacks. Callbacks can be used as filters like so: `add_filter('callback_name',$output);` for each shortcode unless the `tws_info`.
-- [DEVELOPERS] discover each shortcode attributes by calling `[the_shortcode info="1"]` (replace `the_shortcode` with the actual shortcode tag dicovered above). It will produce a simple var_dump with all default attributes and their default values, for easier discovery of possible attributes and also see what values are possible to pass
-- [USER] call actual shortcodes like any other shortcode in WordPress.
+- [DEVELOPERS] discover **existing shortcodes** by calling `[tws_info]` shortcode anywhere. 
+  It will produce a simple var_dump with all ShortCode tags available and their callabacks.   
+  Callbacks can be used as filters like so: `add_filter('callback_name',$output);` for each shortcode unless the `tws_info`. Example:
+  ```
+  add_filter( 'tws_get_wp_children', 'custom_tws_get_wp_children', 10, 1);
+  function custom_tws_get_wp_children($output){
+	  $output = "whatever";
+	  return $output;
+  }
+  ```
+  
+- [DEVELOPERS] discover **each shortcodes attributes** by calling `[the_shortcode info="1"]` 
+  (replace `the_shortcode` with the actual shortcode tag dicovered above). 
+  It will produce a simple var_dump with all default attributes and their default value.
+  Usefful for easier discovery of possible attributes and also see what values are possible to pass
+  
+- [USER] call actual shortcodes like any other shortcode in WordPress!
 
 # Current list of ShortCodes:
 - `tws_group_by`  Group entries in a Loop by dates
