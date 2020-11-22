@@ -85,20 +85,27 @@ class TWS_Shortcodes{
 	 * @atts post_parent(int), post_type(string post name)
 	 * @return int
 	 */
-	function tws_get_wp_children(){
+	function tws_get_wp_children( $atts ){
 
-		$args = $this->tws_register_atts(
+		$args = array(
+			'post_parent' 	=> $this->post->ID,
+			'post_type'     => 'page',
+		);
+		
+		$atts = $this->tws_register_atts( 
 			array(
-		    	'post_parent' => $this->post->ID,
-			'post_type'      => 'page',
+				'output' => 'count',
 			)
 		);
 		
 		$children = get_children( $args, OBJECT );
 		
-		$children = count($children);
+		if( $atts['output'] == 'count' ){
+			$children = count($children);
+			return $children;
+		}
 		
-		return $children;
+		return '';
 
 	}
 	
