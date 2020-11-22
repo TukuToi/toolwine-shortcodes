@@ -37,19 +37,29 @@ Install and activate like any other plugin, **requires** Toolset, WPML is option
 
 # Extend ShortCodes list
 You can techincally add your own shortcodes to the `TWS_Shortcodes` class with your the `tws_shortcodes` filter. 
+
 Example:
 ```
-//Add your ShortCodes to the TWS_Shortcodes Class 
+//Register your custom shortcodes with TWS_Shortcodes
 add_filter( 'tws_shortcodes', 'my_custom_shortcodes', 10, 1);
 
-//Declare your ShortCodes and callbacks
+//Define your custom shortcodes
 function my_custom_shortcodes($shortcodes){
-	$shortcodes['my_shortcode'] = 'my_shortcode_function';	
+	$shortcodes['my_shortcode_tag'] = 'my_shortcode_callback';	
 	return $shortcodes;
 }
 
-//Declare your ShortCode function
-function my_shortcode_function( $atts ){
-	return "foo and bar";
+//ShortCode Callback with 3rd parameter set for  shortcode_atts
+function my_shortcode_callback( $atts ) {
+	$atts = shortcode_atts( array(
+		'foo' => 'something',
+		'bar' => 'something else',
+	), $atts, 'my_shortcode_tag' );
+
+	return "foo = {$atts['foo']}";
 }
 ```
+
+Now you can use your custom shortcode with `TWS_Shortcodes` shortcode attributes!
+Example, below would now output the information for yoru shortcode, even if you did never register an `info` atttribute for it
+`[my_shortcode_tag info="1"]`
