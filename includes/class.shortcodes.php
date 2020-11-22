@@ -2,9 +2,11 @@
 class TWS_Shortcodes{
 
 	public $shortcodes;
+	public $post;
 	
 	function __construct($shortcodes) {
 		$this->shortcodes = $shortcodes;
+		$this->post 	  = $this->tws_current_post();
 
 		$this->tws_register_shortcodes($this->shortcodes);
 	}
@@ -14,10 +16,12 @@ class TWS_Shortcodes{
 	 */
 	function tws_group_by( $atts, $content = null ) {
 
-		$a = shortcode_atts( array(
-			'condition' => 'year',
-			'value' 	=> date('Y'),
-		), $atts );
+		$atts = $this->tws_register_atts( 
+			array(
+				'condition' => 'year',
+				'value' 	=> date('Y'),
+			)
+		);
 
 		static $year 	= null;
   		static $month 	= null;
@@ -44,13 +48,15 @@ class TWS_Shortcodes{
 	 */
 	function tws_get_term_by( $atts, $content = null ) {
 
-		$a = shortcode_atts( array(
-			'field' 	=> 'term_id',//'slug', 'name', 'id' or 'ID' (term_id), or 'term_taxonomy_id'.
-			'value' 	=> '1',//Search for this term value.
-			'taxonomy'	=> 'category',//Taxonomy name. Optional, if $field is 'term_taxonomy_id'.
-			'output'	=> 'name',//NOT Native - 'term_id', 'name', 'slug', 'term_group', 'term_taxonomy_id', 'taxonomy', 'description', 'parent', 'count', 'filter'
-			'filter'	=> 'raw'//'edit', 'db', 'display', 'attribute', or 'js'.
-		), $atts );
+		$atts = $this->tws_register_atts( 
+			array(
+				'field' 	=> 'term_id',
+				'value' 	=> '1', 
+				'taxonomy'	=> 'category', 
+				'output'	=> 'name', 
+				'filter'	=> 'raw'
+			)
+		);
 
 		$term 	= get_term_by($a['field'], $a['value'], $a['taxonomy'], OBJECT, $a['filter']);
 
@@ -64,7 +70,40 @@ class TWS_Shortcodes{
 		return '';
 
 	}
+	
+	/**
+	 * Get Current WPML Language code 
+	 */
+	function tws_current_wpml_language( $atts ) {
+		
+		$atts = $this->tws_register_atts(
+			array(
+				'id' 	=> $this->post,
+				'part' 	=> 'language_code',
+			)
+		);
 
+		if(function_exists('wpml_get_language_information')){	
+			$language = wpml_get_language_information($atts['id']);
+			return $language[$atts['part']];
+		}
+	     
+	    return '';
+
+	}
+	
+	function tws_current_post(){
+		global $post;
+		return $post;
+	}
+
+	function tws_register_atts($atts){
+		$dbt 	= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
+        	$caller = isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
+		$atts 	= shortcode_atts( $atts, $atts, array_search($caller, $this->shortcodes) );
+		return $atts;
+	}
+	
 	function tws_return_shortcode($content){
 		return wpv_do_shortcode($content);
 	}
