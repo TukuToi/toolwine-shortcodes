@@ -103,7 +103,7 @@ class TWS_Shortcodes{
 		$children = get_children( $args, OBJECT );
 
 		if( $atts['output'] == 'count' ){
-			return count($children);
+			return $atts['info'];
 		}
 		elseif( $atts['output'] == 'comma-list' ){
 			return $this->tws_comma_separate($children, $atts['prop']);
@@ -135,6 +135,12 @@ class TWS_Shortcodes{
 
 	}
 
+	function tws_shortcodes_info( ) {
+
+	    return var_dump($this->shortcodes);
+
+	}
+
 	function tws_comma_separate($array, $prop){
 		$values_comma_list = '';
 		foreach ($array  as $key => $value) {
@@ -158,8 +164,9 @@ class TWS_Shortcodes{
 	}
 
 	function tws_register_atts($default, $atts){
-		$dbt 	= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
-        $caller = isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
+		$dbt 			= debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS,2);
+        $caller 		= isset($dbt[1]['function']) ? $dbt[1]['function'] : null;
+        $default['info']= var_dump($default);
 		$atts 	= shortcode_atts( $default, $atts, array_search($caller, $this->shortcodes) );
 		return $atts;
 	}
