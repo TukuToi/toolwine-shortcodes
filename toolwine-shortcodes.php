@@ -67,6 +67,7 @@ if ( !is_admin() ) {
   $shortcodes = array(
     'tws_group_by'    => 'tws_group_by',
     'tws_get_term'    => 'tws_get_term_by',
+    'tws_get_lang'    => 'tws_current_wpml_language',
   );
   new TWS_Shortcodes( $shortcodes );
 }
