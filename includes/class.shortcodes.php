@@ -175,7 +175,8 @@ class TWS_Shortcodes{
 	
 	function tws_register_shortcodes($shortcodes){
 		foreach ($shortcodes as $shortcode => $callback) {
-			add_shortcode( $shortcode, array( $this, $callback ) );
+			$callback = empty( method_exists ( $this , $callback) ) ? $callback : array( $this, $callback );
+			add_shortcode( $shortcode, $callback );
 		}
 	}
 
