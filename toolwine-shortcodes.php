@@ -70,6 +70,7 @@ function tws_run(){
       'tws_get_term'    => 'tws_get_term_by',
       'tws_get_lang'    => 'tws_current_wpml_language',
       'tws_children'    => 'tws_get_wp_children',
+      'tws_info'        => 'tws_shortcodes_info',
     );
     new TWS_Shortcodes( $shortcodes );
   }
