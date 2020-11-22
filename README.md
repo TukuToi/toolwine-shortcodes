@@ -7,8 +7,8 @@ Additional ShortCodes for usage with Toolset and WordPress
 - [USER] call actual shortcodes like any other shortcode in WordPress.
 
 # Current list of ShortCodes:
-`tws_group_by`  Group entries in a Loop by dates
-`tws_get_term`  Display all Term Object properties of a given term, can be set by all known get_term params
-`tws_get_lang`  Display Current WPML language of set post, and set code 
-`tws_children`  Display count or object data of children posts to set post (WP Native Relationship)
-`tws_info`      ToolWine Internal ShortCode to output all available ShortCodes
+- `tws_group_by`  Group entries in a Loop by dates
+- `tws_get_term`  Display all Term Object properties of a given term, can be set by all known get_term params
+- `tws_get_lang`  Display Current WPML language of set post, and set code 
+- `tws_children`  Display count or object data of children posts to set post (WP Native Relationship)
+- `tws_info`      ToolWine Internal ShortCode to output all available ShortCodes
