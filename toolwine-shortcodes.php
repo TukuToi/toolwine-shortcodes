@@ -62,8 +62,8 @@ register_activation_hook( __FILE__, 'tws_activate' );
 /**
  * Load ShortCodes
  */
-function tws_run(){
-  if ( !is_admin() ) {
+function tws_init(){
+  //if ( !is_admin() ) {
     require_once(TWS_MAIN_DIR.'includes/class.shortcodes.php');
     $shortcodes = array(
       'tws_group_by'    => 'tws_group_by',
@@ -72,8 +72,17 @@ function tws_run(){
       'tws_children'    => 'tws_get_wp_children',
       'tws_info'        => 'tws_shortcodes_info',
     );
-    $shortcodes = apply_filters( 'tws_shortcodes', $shortcodes );
-    new TWS_Shortcodes( $shortcodes );
+    $shortcodes     = apply_filters( 'tws_shortcodes', $shortcodes );
+    $tws_shortcodes = new TWS_Shortcodes( $shortcodes );
+    return $tws_shortcodes;
+  //}
+}
+function tws_run(){
+  if ( ( ! is_admin() || wp_doing_ajax() ) && ! wp_doing_cron() ) {
+    add_action('wp', 'tws_init');
+  }
+  else{
+    add_action('init', 'tws_init');
   }
 }
-add_action('wp', 'tws_run');
+add_action( 'plugins_loaded', 'tws_run' );
