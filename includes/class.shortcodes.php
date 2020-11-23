@@ -7,6 +7,7 @@ class TWS_Shortcodes{
 	
 	function __construct($shortcodes) {
 		$this->shortcodes = $shortcodes;
+
 		$this->post 	  = $this->tws_current_post();
 		$this->out 		  = '';
 
@@ -160,7 +161,8 @@ class TWS_Shortcodes{
 	
 	function tws_current_post(){
 		global $post;
-
+		if(!is_object($post))
+			$post = get_the_ID();
 		return $post;
 	}
 
@@ -181,6 +183,14 @@ class TWS_Shortcodes{
 		$atts 	= shortcode_atts( $default, $atts, array_search($caller, $this->shortcodes) );
 		return $atts;
 	}
+
+	function tws_register_toolset($shortcodes) {
+		foreach ($this->shortcodes as $shortcode => $callback) {
+			$shortcodes[] = $shortcode;
+		}
+	    
+	    return $shortcodes;
+	}
 	
 	function tws_register_shortcodes($shortcodes){
 		foreach ($shortcodes as $shortcode => $callback) {
@@ -192,10 +202,10 @@ class TWS_Shortcodes{
 				$callback = array( $this, $callback );
 			}
 			add_shortcode( $shortcode, $callback );
-
-				//$shortcode_filter = 'shortcode_atts_'.$shortcode;
+			if(!empty($external_callback)){
 				add_filter( 'shortcode_atts_' . $shortcode, array($this, 'filter_external_shortcode_atts'), 10, 4 ); 
-			
+			}
+			add_filter('wpv_custom_inner_shortcodes', array($this, 'tws_register_toolset'), 10, 1);
 		}
 	}
 
