@@ -71,6 +71,7 @@ function tws_init(){
       'tws_get_lang'    => 'tws_current_wpml_language',
       'tws_children'    => 'tws_get_wp_children',
       'tws_info'        => 'tws_shortcodes_info',
+      'tws_current_url'	=> 'tws_current_url',
     );
     $shortcodes     = apply_filters( 'tws_shortcodes', $shortcodes );
     $tws_shortcodes = new TWS_Shortcodes( $shortcodes );
