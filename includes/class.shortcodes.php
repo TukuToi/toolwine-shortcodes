@@ -136,6 +136,25 @@ class TWS_Shortcodes{
 	    return apply_filters(__FUNCTION__, $this->out);
 
 	}
+	
+	/**
+	 * Get Current URL no matter where you are
+	 */
+	function tws_current_url( $atts ) {
+		
+		$atts = $this->tws_register_atts(
+			array(
+				'part' 	=> 'request',
+			), $atts
+		);
+		
+	    	global $wp;
+	    	$current_url = home_url( add_query_arg( array(), $wp->request ) );
+	    	$this->out = $current_url;
+	     
+	    	return apply_filters(__FUNCTION__, $this->out);
+
+	}
 
 	function tws_shortcodes_info( ) {
 
