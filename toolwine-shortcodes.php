@@ -73,7 +73,7 @@ function tws_init(){
       'tws_info'        => 'tws_shortcodes_info',
       'tws_current_url'	=> 'tws_current_url',
       'tws_round'	    => 'tws_round',
-      'tws_rep_field'    => 'tws_repeating_field',
+      'tws_rep_field'   => 'tws_repeating_field',
     );
     $shortcodes     = apply_filters( 'tws_shortcodes', $shortcodes );
     $tws_shortcodes = new TWS_Shortcodes( $shortcodes );
