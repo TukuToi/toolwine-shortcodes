@@ -71,6 +71,72 @@ class TWS_Shortcodes{
 		return apply_filters(__FUNCTION__, $this->out);
 
 	}
+
+	/**
+	 * Output any Toolset repeating
+	 * @atts 	$atts 		WordPress ShortCode attributes
+	 * @returns 	string 		repeating field value emebedded in new HTML
+	 */
+	function tws_repeating_field($atts){
+
+		shortcode_atts( 
+			array(
+				'post_id' 		=> $this->post->ID,
+				'field_slug' 	=> '',
+				'type'			=> '',//img,a, etc
+				'ahreftype'		=> '',//tel, mailto
+				'ahrefanchor'	=> '',//link anchor
+				'pre' 			=> '',//eventual wrap pre html
+				'after'			=> '',//eventual wrap after html
+				'separator'		=> '',
+			), 
+			$atts, 
+			'tws_rep_field' 
+		);
+
+		if( !empty($atts['field_slug']) ){
+
+			$meta = get_post_meta($atts['post_id'], $atts['field_slug'], false);
+
+			if( is_array($meta) && !empty($meta) ){
+
+				foreach ($meta as $key => $value) {
+
+					if ( $atts['type'] == 'img' ){
+
+						$img_id 	= attachment_url_to_postid( $value );
+						$img_alt 	= get_post_meta($att_id, '_wp_attachment_image_alt', TRUE);
+						$img_title 	= get_the_title($att_id);
+						$out 		= get_image_tag( $att_id, $img_alt, $img_title, 'center', 'showcase-img' );
+
+					}
+					elseif ( $atts['type'] == 'a' ) {
+
+						$anchor 	= empty($atts['ahrefanchor']) ? $value : $atts['ahrefanchor'];
+						$type 		= !empty($atts['ahreftype']) ?  $atts['ahreftype'] . ':' : '';
+						$out 		= '<a href="'. $type . $value .'">'. $anchor .'</a>';
+
+					}
+					else{
+
+						$out 		= $value;
+						
+					}
+					
+					$this->out .= $atts['pre'] . $out . $atts['after'] . $atts['separator'];
+
+				}
+
+			}
+
+		}
+		
+		if( !empty($atts['separator']) )
+			$html = rtrim($html, $atts['separator']);
+
+		return apply_filters(__FUNCTION__, $this->out);
+
+	}
 	
 	/**
 	 * Get Term by
