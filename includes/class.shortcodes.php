@@ -47,6 +47,32 @@ class TWS_Shortcodes{
 	}
 	
 	/**
+	 * Round any float value
+	 * @atts 	$atts 		WordPress ShortCode attributes
+	 * $atts 	$content 	Enclosed ShortCode Content
+	 * @returns 	mixed 		string error or integer rounded value
+	 */
+	function tws_round( $atts, $content = null ) {
+
+		$atts = $this->tws_register_atts( 
+			array(
+				'round' => 2,
+				'dir' 	=> PHP_ROUND_HALF_UP,
+			), $atts
+		);
+		
+		if( !is_numeric( $this->tws_return_shortcode($content) ) ){
+			$this->out = 'You passed non-numeric values to the shortcode!';
+		}
+		else{
+			$this->out = round($this->tws_return_shortcode($content), $atts['round'], $atts['dir']);
+		}
+		
+		return apply_filters(__FUNCTION__, $this->out);
+
+	}
+	
+	/**
 	 * Get Term by
 	 * @return Term Object 
 	 * @atts field(term_id|slug), value, taxonomy(taxonomy name), output(description|all term object properties|archive-url), filter
